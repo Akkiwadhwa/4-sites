@@ -14,9 +14,13 @@ def websites():
     mycursor.execute(a)
     mydb.commit()
 
+    a = "delete from WEBSITES"
+    mycursor.execute(a)
+    mydb.commit()
+
 
     web_list = ["https://www.metro.pe/", "https://www.vivanda.com.pe/", "https://www.wong.pe/",
-                "https://www.plazavea.com.pe/"]
+                "https://www.plazavea.com.pe/","https://www.ripley.com/"]
     for web in web_list:
         s = "INSERT INTO WEBSITES(Websites) VALUES( %s)"
         data = (web,)

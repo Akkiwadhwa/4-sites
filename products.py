@@ -1,3 +1,5 @@
+import concurrent.futures
+from multiprocessing import Process
 import mysql.connector
 import requests
 from bs4 import BeautifulSoup
@@ -21,21 +23,21 @@ mydb.commit()
 
 
 def main_metro():
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="egeria_admin",
-        password="innovation@1995",
-        database="egeria_db"
-    )
-    mycursor = mydb.cursor(buffered=True)
-    sql = "INSERT INTO Products"
-    sql = sql + "(website_id,product_title_name,country,language,general_currency,product_meta_description," \
-                "product_share_title,product_share_description,product_web_sku," \
-                "product_brand,product_retailer_item_id,product_currency,product_share_image_1," \
-                "product_price,productName,Product,Product_ID," \
-                "ProductReference,brand,brandID,Product_categories,sellingPrice,EAN,promotionID) VALUES( %s, %s, %s, " \
-                "%s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s) "
-    for x in range(1, 100000):
+    def metro(x):
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="egeria_admin",
+            password="innovation@1995",
+            database="egeria_db"
+        )
+        mycursor = mydb.cursor(buffered=True)
+        sql = "INSERT INTO Products"
+        sql = sql + "(website_id,product_title_name,country,language,general_currency,product_meta_description," \
+                    "product_share_title,product_share_description,product_web_sku," \
+                    "product_brand,product_retailer_item_id,product_currency,product_share_image_1," \
+                    "product_price,productName,Product,Product_ID," \
+                    "ProductReference,brand,brandID,Product_categories,sellingPrice,EAN,promotionID) VALUES( %s, %s, %s, " \
+                    "%s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s) "
         response = requests.get(f"https://www.metro.pe/api/catalog_system/pub/products/search?fq=productId:{x}&sc=19")
         try:
             q = ""
@@ -107,25 +109,28 @@ def main_metro():
             mydb.commit()
             print(mycursor.rowcount, "lines were inserted.")
 
+    with concurrent.futures.ThreadPoolExecutor(32) as e:
+        e.map(metro, range(1, 500000))
         # ---------------------vivanda-----------------------
 
 
 def main_vivanda():
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="egeria_admin",
-        password="innovation@1995",
-        database="egeria_db"
-    )
-    mycursor = mydb.cursor(buffered=True)
-    sql = "INSERT INTO Products"
-    sql = sql + "(website_id,product_title_name,country,language,general_currency,product_meta_description," \
-                "product_share_title,product_share_description,product_web_sku," \
-                "product_brand,product_retailer_item_id,product_currency,product_share_image_1," \
-                "product_price,productName,Product,Product_ID," \
-                "ProductReference,brand,brandID,Product_categories,sellingPrice,EAN,promotionID) VALUES( %s, %s, %s, " \
-                "%s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s) "
-    for x in range(1, 100000):
+    def vivanda(x):
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="egeria_admin",
+            password="innovation@1995",
+            database="egeria_db"
+        )
+        mycursor = mydb.cursor(buffered=True)
+        sql = "INSERT INTO Products"
+        sql = sql + "(website_id,product_title_name,country,language,general_currency,product_meta_description," \
+                    "product_share_title,product_share_description,product_web_sku," \
+                    "product_brand,product_retailer_item_id,product_currency,product_share_image_1," \
+                    "product_price,productName,Product,Product_ID," \
+                    "ProductReference,brand,brandID,Product_categories,sellingPrice,EAN,promotionID) VALUES( %s, %s, %s, " \
+                    "%s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s) "
+
         response = requests.get(f"https://www.vivanda.com.pe/api/catalog_system/pub/products/search?fq=productId:{x}")
         try:
             q = ""
@@ -197,25 +202,28 @@ def main_vivanda():
             mydb.commit()
             print(mycursor.rowcount, "lines were inserted.")
 
+    with concurrent.futures.ThreadPoolExecutor(32) as e:
+        e.map(vivanda, range(1, 500000))
     # ---------------wong.pe-----------------------------
 
 
 def main_wong():
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="egeria_admin",
-        password="innovation@1995",
-        database="egeria_db"
-    )
-    mycursor = mydb.cursor(buffered=True)
-    sql = "INSERT INTO Products"
-    sql = sql + "(website_id,product_title_name,country,language,general_currency,product_meta_description," \
-                "product_share_title,product_share_description,product_web_sku," \
-                "product_brand,product_retailer_item_id,product_currency,product_share_image_1," \
-                "product_price,productName,Product,Product_ID," \
-                "ProductReference,brand,brandID,Product_categories,sellingPrice,EAN,promotionID) VALUES( %s, %s, %s, " \
-                "%s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s) "
-    for x in range(1, 100000):
+    def wong(x):
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="egeria_admin",
+            password="innovation@1995",
+            database="egeria_db"
+        )
+        mycursor = mydb.cursor(buffered=True)
+        sql = "INSERT INTO Products"
+        sql = sql + "(website_id,product_title_name,country,language,general_currency,product_meta_description," \
+                    "product_share_title,product_share_description,product_web_sku," \
+                    "product_brand,product_retailer_item_id,product_currency,product_share_image_1," \
+                    "product_price,productName,Product,Product_ID," \
+                    "ProductReference,brand,brandID,Product_categories,sellingPrice,EAN,promotionID) VALUES( %s, %s, %s, " \
+                    "%s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s) "
+
         response = requests.get(f"https://www.wong.pe/api/catalog_system/pub/products/search?sc=70&fq=productId:{x}")
         try:
             q = ""
@@ -289,25 +297,28 @@ def main_wong():
             mydb.commit()
             print(mycursor.rowcount, "lines were inserted.")
 
+    with concurrent.futures.ThreadPoolExecutor(32) as e:
+        e.map(wong, range(1, 500000))
     # ----------------------Plazavea-------------------------
 
 
 def main_Plazavea():
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="egeria_admin",
-        password="innovation@1995",
-        database="egeria_db"
-    )
-    mycursor = mydb.cursor(buffered=True)
-    sql = "INSERT INTO Products"
-    sql = sql + "(website_id,product_title_name,country,language,general_currency,product_meta_description," \
-                "product_share_title,product_share_description,product_web_sku," \
-                "product_brand,product_retailer_item_id,product_currency,product_share_image_1," \
-                "product_price,productName,Product,Product_ID," \
-                "ProductReference,brand,brandID,Product_categories,sellingPrice,EAN,promotionID) VALUES( %s, %s, %s, " \
-                "%s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s) "
-    for x in range(1, 100000):
+    def plazavea(x):
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="egeria_admin",
+            password="innovation@1995",
+            database="egeria_db"
+        )
+        mycursor = mydb.cursor(buffered=True)
+        sql = "INSERT INTO Products"
+        sql = sql + "(website_id,product_title_name,country,language,general_currency,product_meta_description," \
+                    "product_share_title,product_share_description,product_web_sku," \
+                    "product_brand,product_retailer_item_id,product_currency,product_share_image_1," \
+                    "product_price,productName,Product,Product_ID," \
+                    "ProductReference,brand,brandID,Product_categories,sellingPrice,EAN,promotionID) VALUES( %s, %s, %s, " \
+                    "%s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s) "
+
         response = requests.get(f"https://www.plazavea.com.pe/api/catalog_system/pub/products/search?&fq=productId:{x}")
         try:
 
@@ -379,3 +390,98 @@ def main_Plazavea():
             mycursor.execute(sql, p_data)
             mydb.commit()
             print(mycursor.rowcount, "lines were inserted.")
+
+    with concurrent.futures.ThreadPoolExecutor(32) as e:
+        e.map(plazavea, range(1, 500000))
+
+
+# -----------------------------ripley-------------------
+
+def main_ripley():
+    def ripley(x):
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="egeria_admin",
+            password="innovation@1995",
+            database="egeria_db"
+        )
+        mycursor = mydb.cursor(buffered=True)
+        sql = "INSERT INTO Products"
+        sql = sql + "(website_id,product_title_name,country,language,general_currency,product_meta_description," \
+                    "product_share_title,product_share_description,product_web_sku," \
+                    "product_brand,product_retailer_item_id,product_currency,product_share_image_1," \
+                    "product_price,productName,Product,Product_ID," \
+                    "ProductReference,brand,brandID,Product_categories,sellingPrice,EAN,promotionID) VALUES( %s, %s, %s, " \
+                    "%s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s) "
+
+        response = requests.get(f"https://api-pe.ripley.com/marketplace/ecommerce/search/v1/pe/products/by-sku/{x}")
+        try:
+            data = response.json()
+
+            id = 5
+            product_title_name = data["name"]
+            country = "PER"
+            language = "ES-PE"
+            general_currency = data["parentpricestock"]["price"]['master']['currency']
+            product_meta_description = data["shortDescription"]
+            product_share_title = data["title"]
+            product_share_description = data["longDescription"]
+            product_web_sku = None
+            product_brand = data["manufacturer"]
+            product_retailer_item_id = data["partNumber"]
+            product_currency = general_currency
+            product_share_image_1 = data["fullImage"]
+            product_price = data["parentpricestock"]["price"]['master']["value"]
+            productName = product_title_name
+            Product = data["productType"]
+            Product_ID = data["parentProductID"]
+            ProductReference = None
+            brand = product_brand
+            brandID = data["storeID"]
+            Product_categories = data["parentCategoryId"]
+            sellingPrice = product_price
+            EAN = None
+            promotionID = None
+        except:
+            pass
+        else:
+            p_data = (id,
+                      product_title_name,
+                      country,
+                      language,
+                      general_currency,
+                      product_meta_description,
+                      product_share_title,
+                      product_share_description,
+                      product_web_sku,
+                      product_brand,
+                      product_retailer_item_id,
+                      product_currency,
+                      product_share_image_1,
+                      product_price,
+                      productName,
+                      Product,
+                      Product_ID,
+                      ProductReference,
+                      brand,
+                      brandID,
+                      Product_categories,
+                      sellingPrice,
+                      EAN,
+                      promotionID)
+            mycursor.execute(sql, p_data)
+            mydb.commit()
+            print(mycursor.rowcount, "lines were inserted.")
+
+    with concurrent.futures.ThreadPoolExecutor(32) as e:
+        e.map(ripley, range(1, 500000))
+
+
+m = Process(target=main_metro)
+v = Process(target=main_vivanda)
+w = Process(target=main_wong)
+p = Process(target=main_Plazavea)
+m.start()
+v.start()
+w.start()
+p.start()
