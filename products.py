@@ -1,14 +1,14 @@
 import concurrent.futures
-from multiprocessing import Process
+
 import mysql.connector
 import requests
 from bs4 import BeautifulSoup
 
 mydb = mysql.connector.connect(
     host="localhost",
-    user="egeria_admin",
-    password="innovation@1995",
-    database="egeria_db"
+    user="admin",
+    password="admin",
+    database="db"
 )
 mycursor = mydb.cursor(buffered=True)
 s = "CREATE TABLE IF NOT EXISTS Products(id INT AUTO_INCREMENT PRIMARY KEY,website_id int,product_title_name TEXT," \
@@ -26,9 +26,9 @@ def main_metro():
     def metro(x):
         mydb = mysql.connector.connect(
             host="localhost",
-            user="egeria_admin",
-            password="innovation@1995",
-            database="egeria_db"
+            user="admin",
+            password="admin",
+            database="db"
         )
         mycursor = mydb.cursor(buffered=True)
         sql = "INSERT INTO Products"
@@ -109,7 +109,7 @@ def main_metro():
             mydb.commit()
             print(mycursor.rowcount, "lines were inserted.")
 
-    with concurrent.futures.ThreadPoolExecutor(32) as e:
+    with concurrent.futures.ThreadPoolExecutor(2) as e:
         e.map(metro, range(1, 500000))
         # ---------------------vivanda-----------------------
 
@@ -118,9 +118,9 @@ def main_vivanda():
     def vivanda(x):
         mydb = mysql.connector.connect(
             host="localhost",
-            user="egeria_admin",
-            password="innovation@1995",
-            database="egeria_db"
+            user="admin",
+            password="admin",
+            database="db"
         )
         mycursor = mydb.cursor(buffered=True)
         sql = "INSERT INTO Products"
@@ -202,7 +202,7 @@ def main_vivanda():
             mydb.commit()
             print(mycursor.rowcount, "lines were inserted.")
 
-    with concurrent.futures.ThreadPoolExecutor(32) as e:
+    with concurrent.futures.ThreadPoolExecutor(2) as e:
         e.map(vivanda, range(1, 500000))
     # ---------------wong.pe-----------------------------
 
@@ -211,9 +211,9 @@ def main_wong():
     def wong(x):
         mydb = mysql.connector.connect(
             host="localhost",
-            user="egeria_admin",
-            password="innovation@1995",
-            database="egeria_db"
+            user="admin",
+            password="admin",
+            database="db"
         )
         mycursor = mydb.cursor(buffered=True)
         sql = "INSERT INTO Products"
@@ -297,7 +297,7 @@ def main_wong():
             mydb.commit()
             print(mycursor.rowcount, "lines were inserted.")
 
-    with concurrent.futures.ThreadPoolExecutor(32) as e:
+    with concurrent.futures.ThreadPoolExecutor(2) as e:
         e.map(wong, range(1, 500000))
     # ----------------------Plazavea-------------------------
 
@@ -306,9 +306,9 @@ def main_Plazavea():
     def plazavea(x):
         mydb = mysql.connector.connect(
             host="localhost",
-            user="egeria_admin",
-            password="innovation@1995",
-            database="egeria_db"
+            user="admin",
+            password="admin",
+            database="db"
         )
         mycursor = mydb.cursor(buffered=True)
         sql = "INSERT INTO Products"
@@ -391,7 +391,7 @@ def main_Plazavea():
             mydb.commit()
             print(mycursor.rowcount, "lines were inserted.")
 
-    with concurrent.futures.ThreadPoolExecutor(32) as e:
+    with concurrent.futures.ThreadPoolExecutor(2) as e:
         e.map(plazavea, range(1, 500000))
 
 
@@ -401,9 +401,9 @@ def main_ripley():
     def ripley(x):
         mydb = mysql.connector.connect(
             host="localhost",
-            user="egeria_admin",
-            password="innovation@1995",
-            database="egeria_db"
+            user="admin",
+            password="admin",
+            database="db"
         )
         mycursor = mydb.cursor(buffered=True)
         sql = "INSERT INTO Products"
@@ -473,15 +473,8 @@ def main_ripley():
             mydb.commit()
             print(mycursor.rowcount, "lines were inserted.")
 
-    with concurrent.futures.ThreadPoolExecutor(32) as e:
+    with concurrent.futures.ThreadPoolExecutor(2) as e:
         e.map(ripley, range(1, 500000))
 
 
-m = Process(target=main_metro)
-v = Process(target=main_vivanda)
-w = Process(target=main_wong)
-p = Process(target=main_Plazavea)
-m.start()
-v.start()
-w.start()
-p.start()
+

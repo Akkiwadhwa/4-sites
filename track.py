@@ -1,9 +1,8 @@
 import datetime
-import time
 from datetime import timedelta
+
 import mysql.connector
 import requests
-from apscheduler.schedulers.background import BackgroundScheduler
 from bs4 import BeautifulSoup
 
 
@@ -50,6 +49,7 @@ def track():
     mycursor.execute(sql)
     a = mycursor.fetchall()
     l1 = [i[0] for i in a]
+    print(l1)
     for x in l1:
         try:
             response = requests.get(
@@ -173,6 +173,37 @@ def track():
         else:
             print(mycursor.rowcount, "datelines were inserted.")
 
+    sql = "select product_web_sku from Products where website_id = 5"
+    mycursor.execute(sql)
+    a = mycursor.fetchall()
+    l1 = [i[0] for i in a]
+    for x in l1:
+        try:
+            response = requests.get(
+                f"https://api-pe.ripley.com/marketplace/ecommerce/search/v1/pe/products/by-sku/{x}")
+            data = response.json()
+            product_price = float(data["parentpricestock"]["price"]['master']["value"])
+            productName = data["name"]
+            sql = f"select product_price,id from Products where productName = '{productName}'"
+            mycursor.execute(sql)
+            a = mycursor.fetchall()
+            for i in a:
+                try:
+                    sales1 = float(i[0])
+                    id = i[1]
+                    track_price = product_price - sales1
+                    sql1 = f"insert into track(product_id,{d}) values(%s,%s)"
+                except:
+                    pass
+                else:
+                    data = (id, track_price)
+                    mycursor.execute(sql1, data)
+                    mydb.commit()
+
+        except:
+            pass
+        else:
+            print(mycursor.rowcount, "datelines were inserted.")
 
 scheduler = BackgroundScheduler(timezone="gmt")
 scheduler.start()
