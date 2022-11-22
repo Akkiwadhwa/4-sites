@@ -1,8 +1,10 @@
 import datetime
+import time
 from datetime import timedelta
 
 import mysql.connector
 import requests
+from apscheduler.schedulers.background import BackgroundScheduler
 from bs4 import BeautifulSoup
 
 
@@ -63,6 +65,7 @@ def track():
             sql = f"select product_price,id from Products where productName = '{productName}'"
             mycursor.execute(sql)
             a = mycursor.fetchall()
+            print(a)
             for i in a:
                 sales1 = float(i[0])
                 id = i[1]
@@ -205,10 +208,10 @@ def track():
         else:
             print(mycursor.rowcount, "datelines were inserted.")
 
-scheduler = BackgroundScheduler(timezone="gmt")
-scheduler.start()
-track = scheduler.add_job(track, 'cron', hour="1", minute="00")
-
-while True:
-    scheduler.print_jobs()
-    time.sleep(60 * 60 * 2)
+# scheduler = BackgroundScheduler(timezone="gmt")
+# scheduler.start()
+# track = scheduler.add_job(track, 'cron', hour="1", minute="00")
+track()
+# while True:
+#     scheduler.print_jobs()
+#     time.sleep(60 * 60 * 2)
